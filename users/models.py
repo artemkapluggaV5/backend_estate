@@ -1,5 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
+
+class CustomUserManager(UserManager):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('role', 'admin')
+        return super().create_superuser(username, email, password, **extra_fields)
 
 class CustomUser(AbstractUser):
     ROLE_CHOICES = (
@@ -9,6 +14,8 @@ class CustomUser(AbstractUser):
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client', verbose_name="Роль")
     phone_number = models.CharField(max_length=20, blank=True, null=True, verbose_name="Телефон")
+
+    objects = CustomUserManager()
 
     class Meta:
         verbose_name = "Пользователь"
