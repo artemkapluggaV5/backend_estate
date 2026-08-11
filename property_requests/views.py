@@ -79,7 +79,7 @@ class ViewingRequestViewSet(viewsets.ModelViewSet):
             },
             "confirmation": {
                 "type": "redirect",
-                "return_url": f"http://localhost:5173/dashboard?verify_payment={payment.id}"
+                "return_url": f"{getattr(settings, 'SITE_URL', 'http://45.134.38.100')}/dashboard?verify_payment={payment.id}"
             },
             "capture": True,
             "description": f"Оплата объекта {viewing_request.property.title}"

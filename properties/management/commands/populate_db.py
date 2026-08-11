@@ -11,10 +11,10 @@ class Command(BaseCommand):
         fake = Faker('ru_RU')
 
         self.stdout.write('Creating users...')
-        admin = CustomUser.objects.create_superuser('admin', 'admin@example.com', 'adminpass', role='admin')
-        realtor = CustomUser.objects.create_user('realtor1', 'realtor@example.com', 'realtorpass', role='realtor')
+        admin = CustomUser.objects.create_superuser('admin', 'admin@example.com', 'Yug_H0use_Adm!n_2026', role='admin')
+        realtor = CustomUser.objects.create_user('realtor1', 'realtor@example.com', 'Re@lt0r_Str0ng!', role='realtor')
         agent_profile = Agent.objects.create(user=realtor, experience_years=5, rating=4.9)
-        client = CustomUser.objects.create_user('client1', 'client@example.com', 'clientpass', role='client')
+        client = CustomUser.objects.create_user('client1', 'client@example.com', 'Cl!ent_S3cure#', role='client')
 
         self.stdout.write('Creating categories and amenities...')
         cat_flat = Category.objects.create(name='Квартира', description='Жилые квартиры в многоквартирных домах')
