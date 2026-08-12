@@ -9,6 +9,36 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'password', 'email', 'role', 'phone_number', 'first_name', 'last_name']
         read_only_fields = ['role']  # Роль нельзя менять через API
 
+    def validate_username(self, value):
+        import re
+        if len(value) < 4:
+            raise serializers.ValidationError("Имя пользователя должно содержать не менее 4 символов.")
+        if len(value) > 30:
+            raise serializers.ValidationError("Имя пользователя не должно превышать 30 символов.")
+        if not re.match(r"^[a-zA-Z0-9_]+$", value):
+            raise serializers.ValidationError("Имя пользователя может содержать только латинские буквы, цифры и символ подчеркивания.")
+        return value
+
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError("Пароль должен содержать не менее 8 символов.")
+        return value
+
+    def validate_email(self, value):
+        if CustomUser.objects.filter(email=value).exists():
+            raise serializers.ValidationError("Пользователь с таким email уже существует.")
+        return value
+
+    def validate_phone_number(self, value):
+        import re
+        if not value:
+            return value
+        if not re.match(r"^(\+7|8)\d{10}$", value):
+            raise serializers.ValidationError("Введите корректный российский номер телефона (например, +79991234567 или 89991234567).")
+        if CustomUser.objects.filter(phone_number=value).exists():
+            raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
+        return value
+
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         if not password:
