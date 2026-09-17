@@ -44,3 +44,33 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"Уведомление для {self.user.username}: {self.title}"
+
+class GuestChat(models.Model):
+    session_id = models.CharField(max_length=100, unique=True, verbose_name="ID Сессии гостя")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Создан")
+    
+    class Meta:
+        verbose_name = "Чат с гостем"
+        verbose_name_plural = "Чаты с гостями"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Гость {self.session_id[:8]}"
+
+class GuestMessage(models.Model):
+    SENDER_CHOICES = (
+        ('client', 'Клиент'),
+        ('staff', 'Сотрудник'),
+    )
+    chat = models.ForeignKey(GuestChat, on_delete=models.CASCADE, related_name='messages', verbose_name="Чат")
+    sender = models.CharField(max_length=10, choices=SENDER_CHOICES, verbose_name="Отправитель")
+    text = models.TextField(verbose_name="Текст сообщения")
+    sent_at = models.DateTimeField(auto_now_add=True, verbose_name="Время отправки")
+
+    class Meta:
+        verbose_name = "Сообщение гостя"
+        verbose_name_plural = "Сообщения гостей"
+        ordering = ['sent_at']
+
+    def __str__(self):
+        return f"{self.get_sender_display()}: {self.text[:20]}"

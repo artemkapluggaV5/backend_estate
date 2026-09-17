@@ -22,7 +22,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from users.views import UserViewSet
 from properties.views import CategoryViewSet, AmenityViewSet, PropertyViewSet, PropertyImageViewSet, FavoriteViewSet
 from property_requests.views import ViewingRequestViewSet, CallRequestViewSet, ContactRequestViewSet
-from communications.views import ChatMessageViewSet, ReviewViewSet, NotificationViewSet
+from communications.views import ChatMessageViewSet, ReviewViewSet, NotificationViewSet, GuestChatViewSet, GuestMessageViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -37,6 +37,8 @@ router.register(r'contact-requests', ContactRequestViewSet, basename='contactreq
 router.register(r'chats', ChatMessageViewSet, basename='chatmessage')
 router.register(r'reviews', ReviewViewSet)
 router.register(r'notifications', NotificationViewSet, basename='notification')
+router.register(r'guest-chats', GuestChatViewSet, basename='guestchat')
+router.register(r'guest-messages', GuestMessageViewSet, basename='guestmessage')
 
 urlpatterns = [
     path('admin/', admin.site.urls),

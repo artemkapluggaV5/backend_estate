@@ -1,6 +1,19 @@
 from rest_framework import serializers
-from communications.models import ChatMessage, Review, Notification
+from communications.models import ChatMessage, Review, Notification, GuestChat, GuestMessage
 from users.serializers import UserSerializer
+
+class GuestMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuestMessage
+        fields = '__all__'
+        read_only_fields = ('chat', 'sender')
+
+class GuestChatSerializer(serializers.ModelSerializer):
+    messages = GuestMessageSerializer(many=True, read_only=True)
+    
+    class Meta:
+        model = GuestChat
+        fields = '__all__'
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     sender_details = UserSerializer(source='sender', read_only=True)
